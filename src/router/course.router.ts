@@ -2,7 +2,10 @@ import express, { Request, Response } from 'express';
 import { CourseService } from '../controller/course.controller';
 import { myDataSource } from '../config/app-data-source';
 import { User } from '../entity/user';
+import { Course } from '../entity/course';
 const userRepository = myDataSource.getRepository(User);
+const courseRepository = myDataSource.getRepository(Course);
+
 const router = express.Router();
 const courseService = new CourseService();
 
@@ -24,7 +27,19 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
     let info = req.body;
     let userData = await userRepository.findOneBy({ id: info.userId });
-    info.users = userData;
+    info.users = [userData];
+    console.log("🚀 ~ file: course.router.ts:31 ~ router.post ~ info:", info)
+
+    let courseData = await courseRepository.findOne({ where: { name: info.name }, relations: { users: true } });
+    if (courseData) {
+        console.log("🚀 ~ file: course.router.ts:34 ~ router.post ~ courseData:", courseData)
+        courseData.users = [...courseData.users, userData]
+        const updatedCourse = await courseService.updateCourse(courseData.id, courseData)
+        res.json({
+            status: true,
+            data: updatedCourse
+        })
+    }
     const newPost = await courseService.createCourse(info);
     res.json({
         status: true,

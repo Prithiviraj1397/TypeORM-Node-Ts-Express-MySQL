@@ -1,4 +1,4 @@
-import { Entity, Column, OneToOne, OneToMany, JoinColumn, ManyToMany, JoinTable } from "typeorm"
+import { Entity, Column, OneToMany, ManyToMany, JoinTable,ManyToOne } from "typeorm"
 import { BaseEntity } from "./base"
 import { Role } from './role';
 import { Post } from "./post";
@@ -15,8 +15,7 @@ export class User extends BaseEntity {
     @Column()
     age: number
 
-    @OneToOne(() => Role)
-    @JoinColumn()
+    @ManyToOne(() => Role, (role) => role.users)
     role: Role
 
     @OneToMany(() => Post, (post) => post.user)

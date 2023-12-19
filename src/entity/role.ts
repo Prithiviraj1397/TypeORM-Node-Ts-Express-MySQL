@@ -1,6 +1,6 @@
-import { Entity, Column } from "typeorm"
+import { Entity, Column, OneToMany } from "typeorm"
 import { BaseEntity } from "./base"
-
+import { User } from './user';
 class Access {
     @Column({ type: 'boolean' })
     add: boolean;
@@ -25,4 +25,7 @@ export class Role extends BaseEntity {
 
     @Column(() => Access)
     access: Access;
+
+    @OneToMany(() => User, user => user.role)
+    users: User[]
 }

@@ -5,7 +5,7 @@ export class RoleService {
     private roleRepository = myDataSource.getRepository(Role);
 
     async getAllRoles(): Promise<Role[]> {
-        return this.roleRepository.find();
+        return this.roleRepository.find({ relations: { users: true } });
     }
 
     async getRoleById(id: string): Promise<Role | undefined> {

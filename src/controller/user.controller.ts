@@ -11,7 +11,13 @@ const roleRepository = myDataSource.getRepository(Role);
 //     age: number
 // }
 export const getAllusers = async (req: Request, res: Response) => {
-    const allUsers = await userRepository.find()
+    const allUsers = await userRepository.find({
+        relations: {
+            role: true,
+            post: true,
+            course: true
+        },
+    })
     res.json({
         status: true,
         data: allUsers
