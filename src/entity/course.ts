@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToMany, JoinTable } from "typeorm"
+import { Entity, Column, ManyToMany } from "typeorm"
 import { BaseEntity } from "./base"
 import { User } from './user';
 
@@ -8,6 +8,6 @@ export class Course extends BaseEntity {
     name: string
 
     @ManyToMany(() => User, (user) => user.course)
-    @JoinTable()
+    // @JoinTable()
     users: User[]
 }

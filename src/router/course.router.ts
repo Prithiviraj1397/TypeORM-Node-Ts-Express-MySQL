@@ -27,14 +27,13 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
     let info = req.body;
     let userData = await userRepository.findOneBy({ id: info.userId });
-    info.users = [userData];
+    // info.users = [userData];
     console.log("🚀 ~ file: course.router.ts:31 ~ router.post ~ info:", info)
 
     let courseData = await courseRepository.findOne({ where: { name: info.name }, relations: { users: true } });
     if (courseData) {
-        console.log("🚀 ~ file: course.router.ts:34 ~ router.post ~ courseData:", courseData)
-        courseData.users = [...courseData.users, userData]
-        const updatedCourse = await courseService.updateCourse(courseData.id, courseData)
+        courseData.users.push(userData)
+        const updatedCourse = await courseRepository.save(courseData);
         res.json({
             status: true,
             data: updatedCourse

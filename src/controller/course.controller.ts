@@ -5,7 +5,7 @@ export class CourseService {
     private courseRepository = myDataSource.getRepository(Course);
 
     async getAllCourses(): Promise<Course[]> {
-        return this.courseRepository.find();
+        return this.courseRepository.find({ relations: { users: true } });
     }
 
     async getCourseById(id: string): Promise<Course | undefined> {
